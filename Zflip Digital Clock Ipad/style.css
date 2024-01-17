@@ -1,0 +1,82 @@
+*{
+    box-sizing:border-box;
+    background-color:black;
+  }
+  
+  body{
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .card1,.card2{
+    font-size:300px;
+    font-family:Bebas Neue;
+    color:white;
+    background-color:#1D1D23;
+  }
+  
+  .time-container{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  
+  .time-container::before{
+    content:attr(data-date);
+    font: 30px Bebas Neue;
+    color:white;
+    position:absolute;
+    top:15%;
+    left:68%;
+  }
+  
+  .card1::after{
+    content:attr(data-meridiant);
+    color:white;
+    position:absolute;
+    top:70%;
+    left:26%;
+    font: 40px Bebas Neue;
+  }
+  
+  .card2::before{
+    content:attr(data-day-of-week);
+    color:white;
+    position:absolute;
+    top:23%;
+    left:71%;
+    font: 40px Bebas Neue;
+  }
+  .card1, .card2 {
+    font-size: 300px;
+    font-family: 'Bebas Neue';
+    color: white;
+    background-color: #1D1D23;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: transform 0.5s ease;
+  }
+  
+  .card1.change-animation, .card2.change-animation {
+    animation: flip 0.5s ease-in-out;
+  }
+  
+  @keyframes flip {
+    0% {
+      transform: rotateX(0deg);
+    }
+    50% {
+      transform: rotateX(90deg);
+    }
+    100% {
+      transform: rotateX(0deg);
+    }
+  }
+  
