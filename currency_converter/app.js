@@ -54,4 +54,7 @@ btn.addEventListener("click",(evt)=>{
   getExchangeData();
 });
 
+window.addEventListener("load", () => {
+  getExchangeData();
+});
 
