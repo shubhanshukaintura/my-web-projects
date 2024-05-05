@@ -7,6 +7,7 @@ function InputBox(
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       props.addTask(inputText)
+      setInputText("")
     }
   };
   return (
