@@ -16,7 +16,7 @@ function InputBox(
           <button className='bg-red-700 text-white p-2'
             onClick={()=>{
               props.addTask(inputText)
-              setInputText=("")
+              setInputText("")
             }}
           >Add Task</button>
           </div>

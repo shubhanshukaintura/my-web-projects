@@ -9,6 +9,13 @@ function App() {
     setTaskList([...taskList,inputText]);
     console.log(taskList);
   }
+
+  let deleteTask = (index)=>{
+    let newArr = [...taskList];
+    newArr.splice(index,1)
+    setTaskList([...newArr])
+  }
+
   return (
     <>
     <div className="w-full h-screen bg-black flex flex-col justify-center items-center gap-2">
@@ -16,8 +23,12 @@ function App() {
         <InputBox addTask={addTask}
         />
       </div>
-      <div className="x-2">
-          <TaskList taskList={taskList}/>
+      <div className="x-2 flex flex-col gap-3">
+        {taskList.map((listItem,i)=>{
+          return(
+            <TaskList key={i} index={i} item={listItem} deleteTask={deleteTask}/>
+          )
+        })}
       </div>
     </div>
     </>
