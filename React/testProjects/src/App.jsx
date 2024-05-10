@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import InputBox from './components/InputBox'
 import TaskList from './components/TaskList'
+import Calender from './components/Calender';
 
 function App() {
   const [taskList,setTaskList] = useState([]);
@@ -31,6 +32,7 @@ function App() {
           )
         })}
       </div>
+      <Calender/>
     </div>
     </>
   )
