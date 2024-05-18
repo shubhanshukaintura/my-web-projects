@@ -4,9 +4,11 @@ import { FaCaretDown } from "react-icons/fa";
 import { CiViewTable } from "react-icons/ci";
 import { IoIosLink } from "react-icons/io";
 import { LiaUploadSolid } from "react-icons/lia";
+import AddModal from './AddModal';
 
 function AddButton() {
   const [isVisible, setIsVisible] = useState(false);
+  const [modalVisible,setModalVisible] = useState(false);
 
   const toggle = () => {
     setIsVisible(!isVisible);
@@ -24,7 +26,7 @@ function AddButton() {
       </button>
       {isVisible && (
         <ul className="w-[200px] border rounded absolute bg-white mt-2 left-0">
-          <li className="flex px-2 py-1 cursor-pointer hover:bg-gray-200">
+          <li className="flex px-2 py-1 cursor-pointer hover:bg-gray-200" onClick={()=>setModalVisible(true)}>
             <CiViewTable className="m-1" />Create Module
           </li>
           <li className="flex px-2 py-1 cursor-pointer hover:bg-gray-200">
@@ -35,6 +37,7 @@ function AddButton() {
           </li>
         </ul>
       )}
+      <AddModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>
     </div>
   );
 }

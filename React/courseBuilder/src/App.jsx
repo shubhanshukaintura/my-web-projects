@@ -1,6 +1,6 @@
 import AddButton from './components/AddButton'
 import emptyBox from './Assets/emptyBox.png'
-import AddCard from './components/AddCard'
+import AddModal from './components/AddModal'
 import { useState } from 'react'
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
           <h1><b>Nothing added here yet</b></h1>
           <h1>Click on the [+] Add button to add items to this course</h1>
         </div>
-        <AddCard/>
+        <AddModal/>
       </div>
     </>
   )
