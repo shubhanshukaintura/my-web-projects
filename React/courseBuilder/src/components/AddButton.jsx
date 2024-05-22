@@ -5,12 +5,20 @@ import { CiViewTable } from "react-icons/ci";
 import { IoIosLink } from "react-icons/io";
 import { LiaUploadSolid } from "react-icons/lia";
 
-function AddButton({ onOpenModal }) {
+function AddButton({ onOpenModal, onFileUpload, onAddLink }) {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggle = () => {
     setIsVisible(!isVisible);
   };
+
+  const handleAddLinkClick = () => {
+    console.log("Add link clicked");
+    onOpenModal();
+    setIsVisible(false);
+    onAddLink();
+  };
+  
 
   return (
     <div className="relative inline-block">
@@ -30,8 +38,8 @@ function AddButton({ onOpenModal }) {
           >
             <CiViewTable className="m-1" />Create Module
           </li>
-          <li className="flex px-2 py-1 cursor-pointer hover:bg-gray-200">
-            <IoIosLink className="m-1" />Add a link
+          <li className="flex px-2 py-1 cursor-pointer hover:bg-gray-200" onClick={handleAddLinkClick} >
+            <IoIosLink className="m-1"/>Add a link
           </li>
           <li className="flex px-2 py-1 cursor-pointer hover:bg-gray-200">
             <LiaUploadSolid className="m-1" />Upload

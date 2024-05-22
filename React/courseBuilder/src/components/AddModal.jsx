@@ -24,7 +24,7 @@ function AddModal({ modalVisible, setModalVisible, addModule }) {
                 className='w-full border p-2 rounded'
                 type="text"
                 placeholder="Enter module"
-                value={moduleName}
+                value={moduleName} 
                 onChange={(e) => setModuleName(e.target.value)}
               />
             </div>
