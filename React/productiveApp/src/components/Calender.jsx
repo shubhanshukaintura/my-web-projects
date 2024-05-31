@@ -34,7 +34,7 @@ function Calendar() {
         </ul>
         <ul className="flex flex-wrap items-center gap-1 py-2 px-3">
           {days.map((day, index) => (
-            <li className="w-[50px] h-[50px] flex justify-center items-center border">{day !== 0 ? day : ''}</li>
+            <li key={index} className="w-[50px] h-[50px] flex justify-center items-center border">{day !== 0 ? day : ''}</li>
           ))}
         </ul>
       </div>
