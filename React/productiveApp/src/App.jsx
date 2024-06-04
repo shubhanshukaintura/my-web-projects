@@ -10,8 +10,6 @@ function App() {
     console.log(taskList);
   }
 
-
-
   let deleteTask = (index)=>{
     let newArr = [...taskList];
     newArr.splice(index,1)
@@ -20,19 +18,19 @@ function App() {
 
   return (
     <>
-    <div className="w-full h-screen bg-black flex flex-col justify-center items-center gap-2">
+    <div className="w-full h-screen bg-black flex justify-center items-center gap-10">
+      <Calender/>
       <div>
         <InputBox addTask={addTask}
         />
+        <div className="x-2 flex flex-col mt-1 gap-2">
+          {taskList.map((listItem,i)=>{
+            return(
+              <TaskList key={i} index={i} item={listItem} deleteTask={deleteTask}/>
+            )
+          })}
+        </div>
       </div>
-      <div className="x-2 flex flex-col gap-3">
-        {taskList.map((listItem,i)=>{
-          return(
-            <TaskList key={i} index={i} item={listItem} deleteTask={deleteTask}/>
-          )
-        })}
-      </div>
-      <Calender/>
     </div>
     </>
   )
