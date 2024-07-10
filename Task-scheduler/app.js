@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const addTaskButton = document.getElementById('add-task');
     const selectedDateElement = document.getElementById('selected-date');
 
+    const taskModal = document.getElementById('task-modal');
+    const closeModal = document.getElementsByClassName('close')[0];
+    const taskForm = document.getElementById('task-form');
+    const taskText = document.getElementById('task-text');
+    const taskTime = document.getElementById('task-time');
+
     const today = new Date();
     let currentMonth = today.getMonth();
     let currentYear = today.getFullYear();
@@ -59,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function formatDate(date) {
-        const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+        const d = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
         return d.toISOString().split('T')[0];
     }
 
@@ -84,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const taskText = document.createElement('div');
-            taskText.textContent = task.text;
+            taskText.textContent = `${task.text} at ${task.time}`;
             taskItem.appendChild(taskText);
 
             const taskButtons = document.createElement('div');
@@ -126,12 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function editTask(date, index) {
         const tasks = getTasksForDate(date);
-        const newTaskText = prompt('Edit task:', tasks[index].text);
-        if (newTaskText) {
-            tasks[index].text = newTaskText;
-            saveTasksForDate(date, tasks);
-            renderTasks();
-        }
+        taskText.value = tasks[index].text;
+        taskTime.value = tasks[index].time;
+        taskForm.dataset.editIndex = index;
+        taskModal.style.display = 'block';
     }
 
     function removeTask(date, index) {
@@ -142,13 +146,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     addTaskButton.addEventListener('click', () => {
-        const taskText = prompt('New task:');
-        if (taskText) {
-            const tasks = getTasksForDate(selectedDate);
-            tasks.push({ text: taskText, completed: false });
-            saveTasksForDate(selectedDate, tasks);
-            renderTasks();
+        taskText.value = '';
+        taskTime.value = '';
+        delete taskForm.dataset.editIndex;
+        taskModal.style.display = 'block';
+    });
+
+    closeModal.addEventListener('click', () => {
+        taskModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === taskModal) {
+            taskModal.style.display = 'none';
         }
+    });
+
+    taskForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const tasks = getTasksForDate(selectedDate);
+        const task = {
+            text: taskText.value,
+            time: taskTime.value,
+            completed: false
+        };
+
+        if (taskForm.dataset.editIndex !== undefined) {
+            tasks[taskForm.dataset.editIndex] = task;
+        } else {
+            tasks.push(task);
+        }
+
+        saveTasksForDate(selectedDate, tasks);
+        taskModal.style.display = 'none';
+        renderTasks();
     });
 
     prevButton.addEventListener('click', () => changeMonth(-1));
@@ -172,3 +203,4 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedDateElement.textContent = selectedDate;
     renderTasks();
 });
+
