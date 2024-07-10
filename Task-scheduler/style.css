@@ -98,24 +98,45 @@ body {
 
 .task-item {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 10px;
     border: 1px solid #ddd;
-    background-color: #fff;
     margin-bottom: 10px;
 }
 
-.task-item.completed div {
-    text-decoration: line-through;
+.task-item.completed {
+    opacity: 0.6;
+}
+
+.task-text {
+    margin-bottom: 5px;
+}
+
+.task-buttons {
+    display: flex;
 }
 
 .task-buttons button {
-    margin-left: 5px;
+    margin-right: 5px;
+    cursor: pointer;
 }
 
-button {
-    cursor: pointer;
+.red {
+    background-color: #ffcccc;
+}
+
+.yellow {
+    background-color: #ffffcc;
+}
+
+.green {
+    background-color: #ccffcc;
+}
+
+.blue {
+    background-color: #cce6ff;
 }
 
 .modal {

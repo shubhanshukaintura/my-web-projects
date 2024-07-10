@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskForm = document.getElementById('task-form');
     const taskText = document.getElementById('task-text');
     const taskTime = document.getElementById('task-time');
+    const taskColor = document.getElementById('task-color');
 
     const today = new Date();
     let currentMonth = today.getMonth();
@@ -85,19 +86,22 @@ document.addEventListener('DOMContentLoaded', () => {
         tasks.forEach((task, index) => {
             const taskItem = document.createElement('li');
             taskItem.classList.add('task-item');
+            taskItem.classList.add(task.color);
+
             if (task.completed) {
                 taskItem.classList.add('completed');
             }
 
-            const taskText = document.createElement('div');
-            taskText.textContent = `${task.text} at ${task.time}`;
-            taskItem.appendChild(taskText);
+            const taskTextElement = document.createElement('div');
+            taskTextElement.classList.add('task-text');
+            taskTextElement.textContent = `${task.time} - ${task.text}`;
+            taskItem.appendChild(taskTextElement);
 
             const taskButtons = document.createElement('div');
             taskButtons.classList.add('task-buttons');
 
             const completeButton = document.createElement('button');
-            completeButton.textContent = 'Complete';
+            completeButton.textContent = task.completed ? 'Undo' : 'Complete';
             completeButton.addEventListener('click', () => {
                 toggleTaskCompletion(selectedDate, index);
             });
@@ -134,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tasks = getTasksForDate(date);
         taskText.value = tasks[index].text;
         taskTime.value = tasks[index].time;
+        taskColor.value = tasks[index].color;
         taskForm.dataset.editIndex = index;
         taskModal.style.display = 'block';
     }
@@ -148,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     addTaskButton.addEventListener('click', () => {
         taskText.value = '';
         taskTime.value = '';
+        taskColor.value = 'blue'; // Default color
         delete taskForm.dataset.editIndex;
         taskModal.style.display = 'block';
     });
@@ -168,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const task = {
             text: taskText.value,
             time: taskTime.value,
+            color: taskColor.value,
             completed: false
         };
 
@@ -203,4 +210,3 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedDateElement.textContent = selectedDate;
     renderTasks();
 });
-
