@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Calendar</title>
+    <title>Task Scheduler</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <div class="left-section">
+        <div class="left">
             <div class="calendar-container">
                 <div class="calendar-header">
                     <button id="prev">Prev</button>
@@ -29,31 +29,28 @@
                 </div>
             </div>
         </div>
-        <div class="right-section">
-            <h2>Tasks for <span id="selected-date"></span></h2>
-            <ul id="task-list"></ul>
-            <button id="add-task">Add Task</button>
-        </div>
+        <div class="right">
+            <div class="task-list-container">
+                <h3>Tasks for <span id="selected-date"></span></h3>
+                <button id="add-task">Add Task</button>
+                <ul id="task-list" class="task-list"></ul>
+            </div>
+            <div class="info-container">
+                <div id="weather-report">Weather Report</div>
+                <div id="news-report">News Report</div>
+            </div>
+        </div>        
     </div>
 
-    <!-- Task Modal -->
     <div id="task-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Add Task</h2>
             <form id="task-form">
                 <label for="task-text">Task:</label>
                 <input type="text" id="task-text" required>
                 <label for="task-time">Time:</label>
                 <input type="time" id="task-time" required>
-                <label for="task-color">Color:</label>
-                <select id="task-color">
-                    <option value="red">Red (Important)</option>
-                    <option value="yellow">Yellow (Less Important)</option>
-                    <option value="green">Green (Daily Task)</option>
-                    <option value="blue">Blue (Normal)</option>
-                </select>
-                <button type="submit">Add Task</button>
+                <button type="submit">Save</button>
             </form>
         </div>
     </div>

@@ -3,21 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const monthYearElement = document.getElementById('month-year');
     const prevButton = document.getElementById('prev');
     const nextButton = document.getElementById('next');
-    const taskListElement = document.getElementById('task-list');
     const addTaskButton = document.getElementById('add-task');
-    const selectedDateElement = document.getElementById('selected-date');
-
+    const taskListElement = document.getElementById('task-list');
     const taskModal = document.getElementById('task-modal');
-    const closeModal = document.getElementsByClassName('close')[0];
     const taskForm = document.getElementById('task-form');
     const taskText = document.getElementById('task-text');
     const taskTime = document.getElementById('task-time');
-    const taskColor = document.getElementById('task-color');
 
-    const today = new Date();
-    let currentMonth = today.getMonth();
-    let currentYear = today.getFullYear();
-    let selectedDate = formatDate(today);
+    let currentMonth;
+    let currentYear;
+    let selectedDate;
+    let tasks = [];
 
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -45,152 +41,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 const day = i - firstDayIndex + 1;
                 dayElement.textContent = day;
 
-                const date = new Date(year, month, day);
-                dayElement.addEventListener('click', () => {
-                    selectedDate = formatDate(date);
-                    selectedDateElement.textContent = selectedDate;
-                    renderTasks();
-                });
-
                 if (
-                    day === today.getDate() &&
-                    month === today.getMonth() &&
-                    year === today.getFullYear()
+                    day === new Date().getDate() &&
+                    month === new Date().getMonth() &&
+                    year === new Date().getFullYear()
                 ) {
                     dayElement.classList.add('current-day');
                 }
+
+                dayElement.addEventListener('click', () => {
+                    selectedDate = `${year}-${month + 1}-${day}`;
+                    renderTasks();
+                });
             }
 
             daysElement.appendChild(dayElement);
         }
     }
-
-    function formatDate(date) {
-        const d = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
-        return d.toISOString().split('T')[0];
-    }
-
-    function getTasksForDate(date) {
-        const tasks = localStorage.getItem(date);
-        return tasks ? JSON.parse(tasks) : [];
-    }
-
-    function saveTasksForDate(date, tasks) {
-        localStorage.setItem(date, JSON.stringify(tasks));
-    }
-
-    function renderTasks() {
-        taskListElement.innerHTML = '';
-        const tasks = getTasksForDate(selectedDate);
-
-        tasks.forEach((task, index) => {
-            const taskItem = document.createElement('li');
-            taskItem.classList.add('task-item');
-            taskItem.classList.add(task.color);
-
-            if (task.completed) {
-                taskItem.classList.add('completed');
-            }
-
-            const taskTextElement = document.createElement('div');
-            taskTextElement.classList.add('task-text');
-            taskTextElement.textContent = `${task.time} - ${task.text}`;
-            taskItem.appendChild(taskTextElement);
-
-            const taskButtons = document.createElement('div');
-            taskButtons.classList.add('task-buttons');
-
-            const completeButton = document.createElement('button');
-            completeButton.textContent = task.completed ? 'Undo' : 'Complete';
-            completeButton.addEventListener('click', () => {
-                toggleTaskCompletion(selectedDate, index);
-            });
-
-            const editButton = document.createElement('button');
-            editButton.textContent = 'Edit';
-            editButton.addEventListener('click', () => {
-                editTask(selectedDate, index);
-            });
-
-            const removeButton = document.createElement('button');
-            removeButton.textContent = 'Remove';
-            removeButton.addEventListener('click', () => {
-                removeTask(selectedDate, index);
-            });
-
-            taskButtons.appendChild(completeButton);
-            taskButtons.appendChild(editButton);
-            taskButtons.appendChild(removeButton);
-
-            taskItem.appendChild(taskButtons);
-            taskListElement.appendChild(taskItem);
-        });
-    }
-
-    function toggleTaskCompletion(date, index) {
-        const tasks = getTasksForDate(date);
-        tasks[index].completed = !tasks[index].completed;
-        saveTasksForDate(date, tasks);
-        renderTasks();
-    }
-
-    function editTask(date, index) {
-        const tasks = getTasksForDate(date);
-        taskText.value = tasks[index].text;
-        taskTime.value = tasks[index].time;
-        taskColor.value = tasks[index].color;
-        taskForm.dataset.editIndex = index;
-        taskModal.style.display = 'block';
-    }
-
-    function removeTask(date, index) {
-        const tasks = getTasksForDate(date);
-        tasks.splice(index, 1);
-        saveTasksForDate(date, tasks);
-        renderTasks();
-    }
-
-    addTaskButton.addEventListener('click', () => {
-        taskText.value = '';
-        taskTime.value = '';
-        taskColor.value = 'blue'; // Default color
-        delete taskForm.dataset.editIndex;
-        taskModal.style.display = 'block';
-    });
-
-    closeModal.addEventListener('click', () => {
-        taskModal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === taskModal) {
-            taskModal.style.display = 'none';
-        }
-    });
-
-    taskForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const tasks = getTasksForDate(selectedDate);
-        const task = {
-            text: taskText.value,
-            time: taskTime.value,
-            color: taskColor.value,
-            completed: false
-        };
-
-        if (taskForm.dataset.editIndex !== undefined) {
-            tasks[taskForm.dataset.editIndex] = task;
-        } else {
-            tasks.push(task);
-        }
-
-        saveTasksForDate(selectedDate, tasks);
-        taskModal.style.display = 'none';
-        renderTasks();
-    });
-
-    prevButton.addEventListener('click', () => changeMonth(-1));
-    nextButton.addEventListener('click', () => changeMonth(1));
 
     function changeMonth(increment) {
         currentMonth += increment;
@@ -206,7 +73,136 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCalendar(currentMonth, currentYear);
     }
 
-    renderCalendar(currentMonth, currentYear);
-    selectedDateElement.textContent = selectedDate;
-    renderTasks();
+    if (prevButton && nextButton) {
+        prevButton.addEventListener('click', () => changeMonth(-1));
+        nextButton.addEventListener('click', () => changeMonth(1));
+    }
+
+    if (addTaskButton) {
+        addTaskButton.addEventListener('click', () => {
+            openModal();
+        });
+    }
+
+    function openModal(task = null, index = null) {
+        taskText.value = task ? task.text : '';
+        taskTime.value = task ? task.time : '';
+
+        if (taskForm) {
+            taskForm.onsubmit = (e) => {
+                e.preventDefault();
+                const text = taskText.value;
+                const time = taskTime.value;
+                const color = getRandomColor();
+
+                if (task) {
+                    tasks[index] = { text, time, color, completed: task.completed };
+                } else {
+                    tasks.push({ text, time, color, completed: false });
+                }
+
+                saveTasks();
+                renderTasks();
+                closeModal();
+            };
+        }
+
+        if (taskModal) {
+            taskModal.style.display = 'block';
+        }
+    }
+
+    function closeModal() {
+        if (taskModal) {
+            taskModal.style.display = 'none';
+            taskForm.reset();
+        }
+    }
+
+    function renderTasks() {
+        tasks = JSON.parse(localStorage.getItem(selectedDate)) || [];
+        if (taskListElement) {
+            taskListElement.innerHTML = '';
+    
+            tasks.forEach((task, index) => {
+                const taskItem = document.createElement('li');
+                taskItem.classList.add('task-item');
+                if (task.completed) {
+                    taskItem.classList.add('completed');
+                }
+                taskItem.style.backgroundColor = task.color;
+    
+                const taskTimeElement = document.createElement('div');
+                taskTimeElement.classList.add('task-time');
+                taskTimeElement.textContent = formatTime(task.time);
+    
+                const taskTextElement = document.createElement('div');
+                taskTextElement.classList.add('task-text');
+                taskTextElement.textContent = task.text;
+    
+                const taskButtons = document.createElement('div');
+                taskButtons.classList.add('task-buttons');
+    
+                const completeButton = document.createElement('button');
+                completeButton.textContent = 'Complete';
+                completeButton.addEventListener('click', () => {
+                    task.completed = !task.completed;
+                    saveTasks();
+                    renderTasks();
+                });
+    
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.addEventListener('click', () => {
+                    openModal(task, index);
+                });
+    
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', () => {
+                    tasks.splice(index, 1);
+                    saveTasks();
+                    renderTasks();
+                });
+    
+                taskButtons.appendChild(completeButton);
+                taskButtons.appendChild(editButton);
+                taskButtons.appendChild(removeButton);
+    
+                taskItem.appendChild(taskTimeElement);
+                taskItem.appendChild(taskTextElement);
+                taskItem.appendChild(taskButtons);
+                taskListElement.appendChild(taskItem);
+            });
+        }
+    }
+    
+    function formatTime(time) {
+        const [hours, minutes] = time.split(':');
+        let formattedHours = parseInt(hours, 10);
+        const amPm = formattedHours >= 12 ? 'PM' : 'AM';
+        formattedHours = formattedHours % 12 || 12; // Convert hour 0 to 12
+        return `${formattedHours}:${minutes} ${amPm}`;
+    }
+    
+
+    function saveTasks() {
+        localStorage.setItem(selectedDate, JSON.stringify(tasks));
+    }
+
+    function getRandomColor() {
+        const colors = ['#FF5733', '#FFC300', '#3CFF33', '#3366FF'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function init() {
+        const today = new Date();
+        currentMonth = today.getMonth();
+        currentYear = today.getFullYear();
+        selectedDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+        renderCalendar(currentMonth, currentYear);
+        renderTasks();
+    }
+
+    init();
 });
