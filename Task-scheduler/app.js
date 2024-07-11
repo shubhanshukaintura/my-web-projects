@@ -254,3 +254,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch weather data when the page loads
     document.addEventListener('DOMContentLoaded', getUserLocation);
+
+    const newsApiKey = '88ace0058cc0485480451722e1640740'; // Replace with your News API key
+    async function fetchNews() {
+        try {
+            const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsApiKey}`);
+            const data = await response.json();
+            displayNews(data.articles);
+        } catch (error) {
+            console.error('Error fetching news data:', error);
+        }
+    }
+
+    function displayNews(articles) {
+        const newsContainer = document.getElementById('news-container');
+        newsContainer.innerHTML = ''; // Clear any existing content
+
+        // Shuffle the articles array
+        const shuffledArticles = articles.sort(() => 0.5 - Math.random());
+
+        // Select a subset of articles to display
+        const articlesToDisplay = shuffledArticles.slice(0, 5); // Change the number to display more or fewer articles
+
+        articlesToDisplay.forEach(article => {
+            const newsHTML = `
+                <div class="news-item">
+                    <img src="${article.urlToImage}" alt="News image">
+                    <div class="news-details">
+                        <a href="${article.url}" target="_blank">${article.title}</a>
+                    </div>
+                </div>
+            `;
+            newsContainer.innerHTML += newsHTML;
+        });
+    }
+
+    // Fetch news data when the page loads
+    document.addEventListener('DOMContentLoaded', fetchNews);
+
+
