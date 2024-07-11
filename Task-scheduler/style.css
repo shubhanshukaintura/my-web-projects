@@ -229,12 +229,12 @@ body {
 }
 
 .task-list-container {
-    flex: 60%;
+    flex: 70%;
     padding: 10px;
 }
 
 .info-container {
-    flex: 40%;
+    flex: 30%;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -249,3 +249,23 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+#weather-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #0866ff;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.weather-details {
+    flex: 1;
+    text-align: left;
+    color:white;
+}
+
+.weather-icon img {
+    width: 100px;
+    height: 100px;
+}

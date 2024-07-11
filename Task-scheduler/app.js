@@ -203,6 +203,54 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCalendar(currentMonth, currentYear);
         renderTasks();
     }
-
     init();
 });
+
+    const apiKey = '7493c02c23642b10887000471460c0da'; // Replace with your OpenWeather API key
+    async function fetchWeather(latitude, longitude) {
+        try {
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`);
+            const data = await response.json();
+            displayWeather(data);
+        } catch (error) {
+            console.error('Error fetching weather data:', error);
+        }
+    }
+
+    function displayWeather(data) {
+        const weatherContainer = document.getElementById('weather-container');
+        const icon = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+        const weatherHTML = `
+            <div class="weather-details">
+                <h3>Weather in ${data.name}</h3>
+                <p>Temperature: ${data.main.temp}°C</p>
+                <p>Weather: ${data.weather[0].description}</p>
+                <p>Humidity: ${data.main.humidity}%</p>
+                <p>Wind Speed: ${data.wind.speed} m/s</p>
+            </div>
+            <div class="weather-icon">
+                <img src="${icon}" alt="Weather icon">
+            </div>
+        `;
+        weatherContainer.innerHTML = weatherHTML;
+    }
+
+    function getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const { latitude, longitude } = position.coords;
+                fetchWeather(latitude, longitude);
+            }, (error) => {
+                console.error('Error getting location:', error);
+                // Fallback to a default location if geolocation fails
+                fetchWeather(40.7128, -74.0060); // New York City coordinates
+            });
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+            // Fallback to a default location if geolocation is not supported
+            fetchWeather(40.7128, -74.0060); // New York City coordinates
+        }
+    }
+
+    // Fetch weather data when the page loads
+    document.addEventListener('DOMContentLoaded', getUserLocation);
