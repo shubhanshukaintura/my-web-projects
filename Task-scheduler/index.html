@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Scheduler</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">    
 </head>
 <body>
     <div class="container">
@@ -26,6 +26,14 @@
                         <div>Sat</div>
                     </div>
                     <div id="days" class="days"></div>
+                </div>
+            </div>
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+                <div id="task-counts">
+                    <p>Total Tasks: <span id="total-tasks">0</span></p>
+                    <p>Completed Tasks: <span id="completed-tasks">0</span></p>
+                    <p>Incomplete Tasks: <span id="incomplete-tasks">0</span></p>
                 </div>
             </div>
         </div>
@@ -54,7 +62,7 @@
             </form>
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.0.1/progressbar.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

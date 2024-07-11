@@ -20,6 +20,47 @@ document.addEventListener('DOMContentLoaded', () => {
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
+    // Progress Bar and Task Stats
+    const progressBar = new ProgressBar.Circle('#progress-bar', {
+        color: '#007BFF',
+        strokeWidth: 6,
+        trailWidth: 1,
+        easing: 'easeInOut',
+        duration: 1400,
+        text: {
+            autoStyleContainer: true
+        },
+        from: { color: '#FFEA82', width: 1 },
+        to: { color: '#ED6A5A', width: 6 },
+        step: function(state, circle) {
+            circle.path.setAttribute('stroke', state.color);
+            circle.path.setAttribute('stroke-width', state.width);
+
+            const value = Math.round(circle.value() * 100);
+            if (value === 0) {
+                circle.setText('');
+            } else {
+                circle.setText(value + '%');
+            }
+        }
+    });
+
+    progressBar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+    progressBar.text.style.fontSize = '2rem';
+
+    function updateTaskStats() {
+        const totalTasks = tasks.length;
+        const completedTasks = tasks.filter(task => task.completed).length;
+        const incompleteTasks = totalTasks - completedTasks;
+        const completionRate = totalTasks > 0 ? completedTasks / totalTasks : 0;
+        document.getElementById('total-tasks').innerText = totalTasks;
+        document.getElementById('completed-tasks').innerText = completedTasks;
+        document.getElementById('incomplete-tasks').innerText = incompleteTasks;
+
+        progressBar.animate(completionRate);
+    }
+
+
     function renderCalendar(month, year) {
         daysElement.innerHTML = '';
         monthYearElement.textContent = `${months[month]} ${year}`;
@@ -123,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tasks = JSON.parse(localStorage.getItem(selectedDate)) || [];
         if (taskListElement) {
             taskListElement.innerHTML = '';
-    
+
             tasks.forEach((task, index) => {
                 const taskItem = document.createElement('li');
                 taskItem.classList.add('task-item');
@@ -131,52 +172,55 @@ document.addEventListener('DOMContentLoaded', () => {
                     taskItem.classList.add('completed');
                 }
                 taskItem.style.backgroundColor = task.color;
-    
+
                 const taskTimeElement = document.createElement('div');
                 taskTimeElement.classList.add('task-time');
                 taskTimeElement.textContent = formatTime(task.time);
-    
+
                 const taskTextElement = document.createElement('div');
                 taskTextElement.classList.add('task-text');
                 taskTextElement.textContent = task.text;
-    
+
                 const taskButtons = document.createElement('div');
                 taskButtons.classList.add('task-buttons');
-    
+
                 const completeButton = document.createElement('button');
                 completeButton.textContent = 'Complete';
                 completeButton.addEventListener('click', () => {
                     task.completed = !task.completed;
                     saveTasks();
                     renderTasks();
+                    updateTaskStats();
                 });
-    
+
                 const editButton = document.createElement('button');
                 editButton.textContent = 'Edit';
                 editButton.addEventListener('click', () => {
                     openModal(task, index);
                 });
-    
+
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Remove';
                 removeButton.addEventListener('click', () => {
                     tasks.splice(index, 1);
                     saveTasks();
                     renderTasks();
+                    updateTaskStats();
                 });
-    
+
                 taskButtons.appendChild(completeButton);
                 taskButtons.appendChild(editButton);
                 taskButtons.appendChild(removeButton);
-    
+
                 taskItem.appendChild(taskTimeElement);
                 taskItem.appendChild(taskTextElement);
                 taskItem.appendChild(taskButtons);
                 taskListElement.appendChild(taskItem);
             });
         }
+        updateTaskStats();
     }
-    
+
     function formatTime(time) {
         const [hours, minutes] = time.split(':');
         let formattedHours = parseInt(hours, 10);
@@ -184,7 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
         formattedHours = formattedHours % 12 || 12; // Convert hour 0 to 12
         return `${formattedHours}:${minutes} ${amPm}`;
     }
-    
 
     function saveTasks() {
         localStorage.setItem(selectedDate, JSON.stringify(tasks));
@@ -203,7 +246,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCalendar(currentMonth, currentYear);
         renderTasks();
     }
+
     init();
+    // Call updateTaskStats after rendering tasks to initialize
+    updateTaskStats();
 });
 
     const apiKey = '7493c02c23642b10887000471460c0da'; // Replace with your OpenWeather API key
@@ -291,5 +337,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch news data when the page loads
     document.addEventListener('DOMContentLoaded', fetchNews);
-
-

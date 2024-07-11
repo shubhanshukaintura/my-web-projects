@@ -309,3 +309,26 @@ body {
     text-decoration: underline;
 }
 
+#progress-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#progress-bar {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+#task-counts {
+    text-align: center;
+}
+
+#task-counts p {
+    margin: 5px 0;
+}
+
+
+
