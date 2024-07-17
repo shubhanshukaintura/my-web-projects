@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const value = Math.round(circle.value() * 100);
             if (value === 0) {
-                circle.setText('');
+                circle.setText('0%');
             } else {
                 circle.setText(value + '%');
             }
@@ -174,11 +174,41 @@ document.addEventListener('DOMContentLoaded', () => {
         closeButton.addEventListener('click', closeModal);
     }
 
-    function renderTasks() {
+    const festivalsElement = document.getElementById('festivals-list');
+
+    async function fetchFestivalsAndHolidays(date) {
+        const apiKey = 'G8VT5axnduGmGNciYXJMceB99hWQ9MCv';
+        const endpoint = `https://calendarific.com/api/v2/holidays?api_key=${apiKey}&country=IN&year=${new Date(date).getFullYear()}&month=${new Date(date).getMonth() + 1}&day=${new Date(date).getDate()}`;
+    
+        try {
+            const response = await fetch(endpoint);
+            const data = await response.json();
+    
+            if (!response.ok) {
+                throw new Error(`Error fetching festivals and holidays: ${data.error}`);
+            }
+    
+            return data.response.holidays;
+        } catch (error) {
+            console.error('Error fetching festivals and holidays:', error);
+            throw error;
+        }
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
+
+    async function renderTasks() {
         tasks = JSON.parse(localStorage.getItem(selectedDate)) || [];
         if (taskListElement) {
             taskListElement.innerHTML = '';
 
+            const selectedDateSpan = document.getElementById('selected-date');
+            selectedDateSpan.textContent = formatDate(selectedDate);
+    
             tasks.forEach((task, index) => {
                 const taskItem = document.createElement('li');
                 taskItem.classList.add('task-item');
@@ -186,18 +216,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     taskItem.classList.add('completed');
                 }
                 taskItem.style.backgroundColor = task.color;
-
+    
                 const taskTimeElement = document.createElement('div');
                 taskTimeElement.classList.add('task-time');
                 taskTimeElement.textContent = formatTime(task.time);
-
+    
                 const taskTextElement = document.createElement('div');
                 taskTextElement.classList.add('task-text');
                 taskTextElement.textContent = task.text;
-
+    
                 const taskButtons = document.createElement('div');
                 taskButtons.classList.add('task-buttons');
-
+    
                 const completeButton = document.createElement('button');
                 completeButton.textContent = 'Complete';
                 completeButton.addEventListener('click', () => {
@@ -206,13 +236,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     renderTasks();
                     updateTaskStats();
                 });
-
+    
                 const editButton = document.createElement('button');
                 editButton.textContent = 'Edit';
                 editButton.addEventListener('click', () => {
                     openModal(task, index);
                 });
-
+    
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Remove';
                 removeButton.addEventListener('click', () => {
@@ -221,19 +251,63 @@ document.addEventListener('DOMContentLoaded', () => {
                     renderTasks();
                     updateTaskStats();
                 });
-
+    
                 taskButtons.appendChild(completeButton);
                 taskButtons.appendChild(editButton);
                 taskButtons.appendChild(removeButton);
-
+    
                 taskItem.appendChild(taskTimeElement);
                 taskItem.appendChild(taskTextElement);
                 taskItem.appendChild(taskButtons);
                 taskListElement.appendChild(taskItem);
             });
+
+            try {
+                const holidays = await fetchFestivalsAndHolidays(selectedDate);
+    
+                festivalsElement.innerHTML = ''; // Clear previous content
+    
+                if (holidays.length > 0) {
+                    const festivalList = document.createElement('div');
+                    festivalList.classList.add('festival-list');
+    
+                    holidays.forEach(holiday => {
+                        const festivalCard = document.createElement('div');
+                        festivalCard.classList.add('festival-card');
+    
+                        const festivalName = document.createElement('h3');
+                        festivalName.textContent = holiday.name;
+                        festivalCard.appendChild(festivalName);
+    
+                        const festivalDescription = document.createElement('p');
+                        // Find the first full stop and truncate the description
+                        const firstFullStopIndex = holiday.description.indexOf('.');
+                        if (firstFullStopIndex !== -1) {
+                            festivalDescription.textContent = holiday.description.substring(0, firstFullStopIndex + 1);
+                        } else {
+                            festivalDescription.textContent = holiday.description;
+                        }
+                        festivalCard.appendChild(festivalDescription);
+    
+                        festivalList.appendChild(festivalCard);
+                    });
+    
+                    festivalsElement.appendChild(festivalList);
+                } else {
+                    const noFestivalsItem = document.createElement('p');
+                    noFestivalsItem.textContent = 'No festivals or holidays';
+                    festivalsElement.appendChild(noFestivalsItem);
+                }
+            } catch (error) {
+                console.error('Failed to fetch festivals and holidays:', error);
+                const errorItem = document.createElement('p');
+                errorItem.textContent = 'Failed to fetch festivals and holidays';
+                festivalsElement.appendChild(errorItem);
+            }
         }
         updateTaskStats();
     }
+       
 
     function formatTime(time) {
         const [hours, minutes] = time.split(':');
