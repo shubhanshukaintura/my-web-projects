@@ -265,3 +265,16 @@ body {
 #task-counts p {
     margin: 5px 0;
 }
+
+.red-dot {
+    width: 5px;
+    height: 5px;
+    background-color: red;
+    border-radius: 50%;
+    margin: 2px auto 0;
+}
+
+.selected-day {
+    background-color: rgba(0, 123, 255, 0.1);
+    border: 1px solid #007BFF;
+}

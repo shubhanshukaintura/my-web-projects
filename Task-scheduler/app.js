@@ -61,45 +61,54 @@ document.addEventListener('DOMContentLoaded', () => {
         progressBar.animate(completionRate);
     }
 
-
     function renderCalendar(month, year) {
         daysElement.innerHTML = '';
         monthYearElement.textContent = `${months[month]} ${year}`;
-
+    
         const firstDayIndex = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-
+    
         const prevMonthDays = new Date(year, month, 0).getDate();
         const totalDays = firstDayIndex + daysInMonth;
-
+    
         for (let i = 0; i < totalDays; i++) {
             const dayElement = document.createElement('div');
             dayElement.classList.add('day');
-
+    
             if (i < firstDayIndex) {
                 dayElement.classList.add('inactive');
                 dayElement.textContent = prevMonthDays - firstDayIndex + i + 1;
             } else {
                 const day = i - firstDayIndex + 1;
                 dayElement.textContent = day;
-
+    
                 if (
                     day === new Date().getDate() &&
                     month === new Date().getMonth() &&
                     year === new Date().getFullYear()
                 ) {
-                    dayElement.classList.add('current-day');
+                    const dot = document.createElement('div');
+                    dot.classList.add('red-dot');
+                    dayElement.appendChild(dot);
                 }
-
+    
                 dayElement.addEventListener('click', () => {
                     selectedDate = `${year}-${month + 1}-${day}`;
                     renderTasks();
+                    highlightSelectedDay(dayElement);
                 });
             }
-
+    
             daysElement.appendChild(dayElement);
         }
     }
+    
+    function highlightSelectedDay(dayElement) {
+        const allDays = document.querySelectorAll('.day');
+        allDays.forEach(day => day.classList.remove('selected-day'));
+        dayElement.classList.add('selected-day');
+    }
+    
 
     function changeMonth(increment) {
         currentMonth += increment;
