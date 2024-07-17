@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskForm = document.getElementById('task-form');
     const taskText = document.getElementById('task-text');
     const taskTime = document.getElementById('task-time');
+    const closeButton = document.getElementsByClassName('close')[0];
 
     let currentMonth;
     let currentYear;
@@ -158,6 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
             taskModal.style.display = 'none';
             taskForm.reset();
         }
+    }
+
+    if (closeButton) {
+        closeButton.addEventListener('click', closeModal);
     }
 
     function renderTasks() {

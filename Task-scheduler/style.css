@@ -1,13 +1,10 @@
 /* General Styles */
-*{
+* {
     box-sizing: border-box;
 }
 
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
     margin: 0;
     background-color: #f4f4f4;
@@ -24,13 +21,11 @@ body {
 }
 
 .left {
-    flex: 20%;
     border-right: 1px solid #ddd;
     background-color: #fff;
 }
 
 .right {
-    flex: 80%;
     background-color: #fff;
 }
 
@@ -39,15 +34,6 @@ body {
     border: 1px solid #ddd;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #007BFF;
-    color: white;
 }
 
 .calendar-header h2 {
@@ -63,8 +49,6 @@ body {
 }
 
 .calendar {
-    display: flex;
-    flex-direction: column;
     padding: 10px;
 }
 
@@ -108,18 +92,8 @@ body {
 }
 
 /* Task List Styles */
-.task-list-container {
-    width: 100%;
-    padding: 10px;
-}
-
 .task-list-container h3 {
     margin-top: 0;
-}
-
-.task-list {
-    list-style: none;
-    padding: 0;
 }
 
 .task-item {
@@ -155,41 +129,11 @@ body {
 }
 
 /* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4);
-    padding-top: 60px;
-}
-
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+    border-radius: 8px;
 }
 
 #task-form {
@@ -241,14 +185,6 @@ body {
     gap: 10px;
 }
 
-#weather-report, #news-report {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 #weather-container {
     display: flex;
     justify-content: space-between;
@@ -262,7 +198,7 @@ body {
 .weather-details {
     flex: 1;
     text-align: left;
-    color:white;
+    color: white;
 }
 
 .weather-icon img {
@@ -329,6 +265,3 @@ body {
 #task-counts p {
     margin: 5px 0;
 }
-
-
-
