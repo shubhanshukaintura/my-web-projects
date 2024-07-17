@@ -11,10 +11,11 @@
     
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3 p-0">
+            <div class="col-md-3 p-0 vh-100">
                 <div class="left">
+                    <div class="glass-card">
                     <div class="calendar-container">
-                        <div class="calendar-header d-flex justify-content-between align-items-center p-2 bg-primary text-white">
+                        <div class="calendar-header d-flex justify-content-between align-items-center p-2 bg-307ff4 text-white">
                             <button id="prev" class="btn btn-light btn-sm">Prev</button>
                             <h2 id="month-year" class="m-0"></h2>
                             <button id="next" class="btn btn-light btn-sm">Next</button>
@@ -32,6 +33,7 @@
                             <div id="days" class="days d-flex flex-wrap"></div>
                         </div>
                     </div>
+                    </div>
                     <div id="progress-container" class="text-center mt-2">
                         <div id="progress-bar" class="mx-auto"></div>
                         <div id="task-counts">
@@ -46,7 +48,7 @@
                     </div>                    
                 </div>
             </div>
-            <div class="col-md-9 p-0">
+            <div class="col-md-9 p-0 vh-100">
                 <div class="right">
                     <div class="task-list-container p-2">
                         <h3>Tasks for <span id="selected-date"></span></h3>
@@ -54,7 +56,10 @@
                         <ul id="task-list" class="task-list list-unstyled"></ul>
                     </div>
                     <div class="info-container">
-                        <div id="weather-container" class="d-flex justify-content-between align-items-center p-3 bg-info text-white rounded mb-3"></div>
+                        <div class="glass-card">
+                        <div id="weather-container" class="d-flex justify-content-between align-items-center p-3 text-white rounded mb-3"></div>
+                        </div>
+                        <h3>News</h3>
                         <div id="news-container" class="overflow-auto" style="height: 400px;"></div>
                     </div>
                 </div>
@@ -83,7 +88,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>

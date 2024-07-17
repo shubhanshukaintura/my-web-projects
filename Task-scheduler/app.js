@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Progress Bar and Task Stats
     const progressBar = new ProgressBar.Circle('#progress-bar', {
-        color: '#007BFF',
+        color: '#30d350',
         strokeWidth: 6,
         trailWidth: 1,
         easing: 'easeInOut',
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             autoStyleContainer: true
         },
         from: { color: '#FFEA82', width: 1 },
-        to: { color: '#ED6A5A', width: 6 },
+        to: { color: '#30d350', width: 6 },
         step: function(state, circle) {
             circle.path.setAttribute('stroke', state.color);
             circle.path.setAttribute('stroke-width', state.width);
@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getRandomColor() {
-        const colors = ['#FF5733', '#FFC300', '#3CFF33', '#3366FF'];
+        const colors = ['#f94d4d', '#3478f7', '#30d350', '#fea900'];
         return colors[Math.floor(Math.random() * colors.length)];
     }
 
